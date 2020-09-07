@@ -3,17 +3,17 @@
 
 using namespace std;
 
-int* bnd(int* a, int l, int h, int t, bool u = false) {
+int* bnd(int* l, int* h, int t, bool u = false) {
     while (l < h) {
-        int m = (l + h) / 2;
+        int* m = l + (h - l) / 2;
 
-        if (a[m] < t || (u && a[m] == t))
+        if (*m < t || (u && *m == t))
             l = m + 1;
         else
             h = m;
     }
 
-    return a + l;
+    return l;
 }
 
 int main() {
@@ -32,8 +32,8 @@ int main() {
             printf("\n");
 
         printf("%6d ", i);
-        printf("%2d/%2d ", *bnd(A, 0, S - 1, i, false), *lower_bound(A, A + S - 1, i));
-        printf("%2d/%2d\n", *bnd(A, 0, S - 1, i, true), *upper_bound(A, A + S - 1, i));
+        printf("%2d/%2d ", *bnd(A, A + S - 1, i, false), *lower_bound(A, A + S - 1, i));
+        printf("%2d/%2d\n", *bnd(A, A + S - 1, i, true), *upper_bound(A, A + S - 1, i));
     }
 
     return 0;

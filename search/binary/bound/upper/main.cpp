@@ -3,17 +3,17 @@
 
 using namespace std;
 
-int* ubnd(int* a, int l, int h, int t) {
+int* ubnd(int* l, int* h, int t) {
     while (l < h) {
-        int m = (l + h) / 2;
+        int* m = l + (h - l) / 2;
 
-        if (a[m] <= t)
+        if (*m <= t)
             l = m + 1;
         else
             h = m;
     }
 
-    return a + l;
+    return l;
 }
 
 int main() {
@@ -32,7 +32,7 @@ int main() {
             printf("\n");
 
         printf("%6d ", i);
-        printf("%2d/%2d\n", *ubnd(A, 0, S - 1, i), *upper_bound(A, A + S - 1, i));
+        printf("%2d/%2d\n", *ubnd(A, A + S - 1, i), *upper_bound(A, A + S - 1, i));
     }
 
     return 0;
