@@ -1,24 +1,30 @@
 #include <stdio.h>
-
-#define S 5
+#include <stdlib.h>
+#include <time.h>
 
 int min(const int& i, const int& j) {
     return i < j ? i : j;
 }
 
-void msrt(int* a, int n) { 
-    for (int s = 1; s < n; s *= 2) {
-        for (int p = 0; p < n;) {
-            static int b[S], i, j;
+bool ascending(int a, int b) {
+    return a < b;
+}
+
+template <typename T, bool (*P)(T, T)>
+void msrt(T* a, int s) { 
+    T b[s];
+
+    for (int n = 1; n < s; n *= 2) {
+        for (int i, j, p = 0; p < s;) {
             int l = p;
-            int m = min(p += s, n) - 1;
-            int h = min(p += s, n) - 1;
+            int m = min(p += n, s) - 1;
+            int h = min(p += n, s) - 1;
 
             for (i = l; i <= h; i++)
                 b[i] = a[i];
 
             for (i = l, j = m + 1; i <= m && j <= h;)
-                a[l++] = b[i] <= b[j] ? b[i++] : b[j++];
+                a[l++] = P(b[i], b[j]) ? b[i++] : b[j++];
 
             while (i <= m)
                 a[l++] = b[i++];
@@ -29,13 +35,26 @@ void msrt(int* a, int n) {
     }
 }
 
+void dump(int* a, int n) {
+    printf("size=%d, ", n);
+
+    for (int i = 0; i < n; i++)
+        printf("%d ", a[i]);
+
+    printf("\n");
+}
+
 int main() {
-    int A[S] = { 4, 2, 0, 2, 1 };
+    srand((unsigned int) time(NULL));
 
-    msrt(A, S);
+    for (int a[10], s; 0 < (s = (rand() % 10));) {
+        for (int i = 0; i < s; i++)
+            a[i] = rand() % 10;
 
-    for (int i = 0; i < S; i++)
-        printf("%d ", A[i]);
+        msrt<int, ascending>(a, s);
+
+        dump(a, s);
+    }
 
     return 0;
 }
