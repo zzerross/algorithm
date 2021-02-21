@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define N 5
+
 template <typename T = int>
 void swap(T& a, T& b) {
     T t = a;
@@ -11,7 +13,7 @@ void swap(T& a, T& b) {
 }
 
 template <typename T = int>
-void qsrt(T* a, int l, int h) {
+T qslt(T* a, int l, int h, int k) {
     if (l < h) {
         int i = l;
         int j = h;
@@ -25,11 +27,15 @@ void qsrt(T* a, int l, int h) {
                 swap(a[i], a[j]);
         }
 
-        swap(a[i], a[p]);
+        if (j != k) {
+            swap(a[i], a[p]);
 
-        qsrt(a, l, p - 1);
-        qsrt(a, p + 1, h);
+            qslt(a, l, p - 1, k);
+            qslt(a, p + 1, h, k);
+        }
     }
+
+    return a[k];
 }
 
 int main() {
@@ -42,10 +48,8 @@ int main() {
             printf("%d ", a[i] = rand() % 10);
         printf("\n");
 
-        qsrt(a, 0, n - 1);
-
         for (int i = 0; i < n; i++)
-            printf("%d ", a[i]);
+            printf("%d ", qslt(a, 0, n - 1, i));
         printf("\n");
     }
 
