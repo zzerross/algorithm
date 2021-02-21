@@ -47,7 +47,7 @@ void dump(int* a, int n) {
 int main() {
     srand((unsigned int) time(NULL));
 
-    for (int a[10], s; 0 < (s = (rand() % 10));) {
+    for (int a[9], s; 0 < (s = (rand() % 10));) {
         for (int i = 0; i < s; i++)
             a[i] = rand() % 10;
 
