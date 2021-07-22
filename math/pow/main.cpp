@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
-int D(int n, char* e = nullptr) {
+int D(int n, const char* e = nullptr) {
 #if 1
     for (int i = sizeof(n) * 8 - 1; 0 <= i; i--)
         printf("%d%s", n >> i & 1, i % 4 ? "" : " ");
@@ -32,7 +32,7 @@ int c2pow(int a) {
     for (int s = 1; s <= 16; s *= 2)
         a |= (a >> s);
 
-    return a + 1;
+    return ++a;
 }
 
 int main() {
