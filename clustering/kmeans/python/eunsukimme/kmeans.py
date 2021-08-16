@@ -47,3 +47,4 @@ def eunsukimme_kmeans(samples, k):
     plt.xlabel('sepal length (cm)')
     plt.ylabel('sepal width (cm)')
     plt.show()
+    return centroids
