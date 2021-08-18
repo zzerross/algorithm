@@ -9,11 +9,14 @@ def distance(a, b):
     l = list(z)
     return sum([(el_a - el_b)**2 for el_a, el_b in l]) ** 0.5
 
-def eunsukimme_kmeans(samples, k):
+def eunsukimme_kmeans(samples, k, centroids_x = None, centroids_y = None):
     x = samples[:, 0]
     y = samples[:, 1]
-    centroids_x = np.random.uniform(min(x), max(x), k)
-    centroids_y = np.random.uniform(min(y), max(y), k)
+    
+    if centroids_x is None:
+        centroids_x = np.random.uniform(min(x), max(x), k)
+    if centroids_y is None:
+        centroids_y = np.random.uniform(min(y), max(y), k)
     centroids = np.stack((centroids_x, centroids_y), axis=1)
     centroids_old = np.zeros(centroids.shape)
     labels = np.zeros(len(samples))
@@ -36,7 +39,7 @@ def eunsukimme_kmeans(samples, k):
             centroids[i] = np.mean(points, axis=0)
         for i in range(k):
             error[i] = distance(centroids_old[i], centroids[i])
-
+    """
     colors = ['r', 'g', 'b']
     for i in range(k):
         points = np.array([sepal_length_width[j] for j in range(len(sepal_length_width)) if labels[j] == i])
@@ -47,4 +50,5 @@ def eunsukimme_kmeans(samples, k):
     plt.xlabel('sepal length (cm)')
     plt.ylabel('sepal width (cm)')
     plt.show()
-    return centroids
+    """
+    return centroids, labels
