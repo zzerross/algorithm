@@ -1,11 +1,8 @@
-#include <array>
-#include <algorithm>
-#include <cstdio>
-#include <iostream>
+#include <stdio.h>
 
 using namespace std;
 
-#if DEBUG == 1
+#if D
 #define pr0(fmt, ...) printf(fmt, ##__VA_ARGS__)
 #endif
 
@@ -13,81 +10,69 @@ using namespace std;
 #define pr0(fmt, ...)
 #endif
 
-#define POINTS 100000
-#define RESULTS 3
+#define DSTNC 0x07ffffff
 
-template <typename T, typename R = unsigned short, int BITS = 16>
-struct Random {
-public:
-    T next() {
-        static R delta = 1;
+#define CLSTR_N 10
+int gClstrN;
+double gClstrX[CLSTR_N], gClstrY[CLSTR_N];
 
-        return (T) random() / (T) (random() + delta);
-    }
+#define PNT_N 1000
+int gPntN;
+double gPntX[PNT_N], gPntY[PNT_N];
 
-    void test(int n) {
-#if DEBUG == 1
-        for (int i = 0; i < n; i++) {
-            pr0("%.10lf\n", next());
+#define PNT_N 1000
+int gPntN;
+double gPntX[PNT_N], gPntY[PNT_N];
+
+int nearest() {
+    for (int p = 0; p < gPntN; p++) {
+        gClstr[p] = 0;
+
+        for (int m = DSTNC, c = 0; c < gClstrN; c++) {
+            int d = distance(gPntY[p], gPntX[p], gClstrY[c], gClstrX[c]);
+            if (d < gClstrD[p]) {
+                gClstrD[p] = d;
+                gClstr[p] = j;
+            }
         }
-#endif
     }
 
-private:
-    constexpr static unsigned long long MAGIC = 25214903917ULL;
+    return 0;
+}
 
-    unsigned long long SEED = 5;
-
-    R random() {
-        return ((R) ((SEED = SEED * (MAGIC) + 11ULL) >> BITS));
-    }
-};
-
-template <typename T>
-struct Point {
-    T x;
-    T y;
-    T z;
-
-    Point(): x(0), y(0), z(0) {
-    }
-
-    Point(T x, T y, T z): x(x), y(y), z(z) {
-    }
-};
-
-template <typename T>
-struct RandomPoints {
-    array<Point<T>, POINTS> points;
-
-    RandomPoints() {
-        Random<T> r;
-
-        generate(points.begin(), points.end(), [r]() mutable {
-            return Point<T>(r.next(), r.next(), r.next());
-        });
-    }
-
-    void dump(const char* s = nullptr) {
-#if DEBUG == 1
-        pr0("%10s: ", s ? s : "");
-
-        for (auto& p : points) {
-            // cout << "{ " << p.x << " " << p.y << " " << p.z << "}" << endl;
-            pr0("%2.10lf, %2.10lf, %2.10lf,\n", p.x, p.y, p.z);
+int center() {
+    for (int c = 0; c < gClstrN; c++) {
+        gCntrN[c] = 0;
+        gCntrX[c] = gCntrY[c] = 0.0f;
+        for (int p = 0; p < gPntN; p++) {
+            if (c == gClstr[p]) {
+                gCntrX[c] = (gCntrX[c] + gPntX[p]) / (gClstrN[c] ? 2.0f : 1.0f);
+                gCntrY[c] = (gCntrY[c] + gPntY[p]) / (gClstrN[c] ? 2.0f : 1.0f);
+                gCntrN[c]++;
+            }
         }
-
-        pr0("\n");
-#endif
     }
-};
+}
+
+int cluster() {
+    while (true) {
+        nearest();
+        center();
+    }
+
+    return 0;
+}
 
 int main() {
-    RandomPoints<double> points;
+    scanf("%d", &gClstrN);
+    for (int c = 0; c < gClstrN; c++)
+        scanf("%lf %lf", &gClstrX[c], &gClstrY[c]);
 
-    points.dump();
+    scanf("%d", &gPntN);
+    for (int p = 0; p < gPntN; p++)
+        scanf("%lf %lf", &gPntX[p], &gPntY[p]);
 
-    cluster(points, );
+    cluster();
 
     return 0;
 }
