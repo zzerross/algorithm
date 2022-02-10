@@ -2,12 +2,12 @@
 
 using namespace std;
 
-#if D
-#define pr0(fmt, ...) printf(fmt, ##__VA_ARGS__)
+#if 1 <= DEBUG
+#define D1(fmt, ...) printf(fmt, ##__VA_ARGS__)
 #endif
 
-#ifndef pr0
-#define pr0(fmt, ...)
+#ifndef D1
+#define D1(fmt, ...)
 #endif
 
 #define DISTANCE 0x07ffffff
@@ -32,7 +32,7 @@ struct Point2d {
     }
 
     T distance(const Point2d& o) const {
-        return 0;
+        return (x - o.x)*(x - o.x) + (y - o.y)*(y - o.y);
     }
 };
 
@@ -53,20 +53,21 @@ DoublePoint2dArray<CLUSTERS> gCenters;
 #define POINTS 1000
 DoublePoint2dArray<POINTS> gPoints;
 
-Array<double, POINTS> gDistanceOf;
 Array<int, POINTS> gClusterOf;
 
 void nearest() {
     for (int p = 0; p < gPoints.len; p++) {
-        gClusterOf[p] = 0;
+        int m = DISTANCE;
 
-        for (int m = DISTANCE, c = 0; c < gClusters.len; c++) {
+        for (int c = 0; c < gClusters.len; c++) {
             int d = gPoints[p].distance(gClusters[c]);
-            if (d < gDistanceOf[p]) {
-                gDistanceOf[p] = d;
+            if (d < m) {
+                m = d;
                 gClusterOf[p] = c;
             }
         }
+
+        D1("P[%d] %.1f %.1f: %d\n", p, gPoints[p].x, gPoints[p].y, gClusterOf[p]);
     }
 }
 
@@ -91,6 +92,9 @@ void center() {
 int main() {
     gClusters.read();
     gPoints.read();
+
+    for (int p = 0; p < gPoints.len; p++)
+        gClusterOf[p] = 0;
 
     while (true) {
         nearest();
