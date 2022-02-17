@@ -11,6 +11,7 @@ print(clusters)
 
 axises = args - 2
 samples = int(sys.argv[2]) if 0 < axises else 0
+print(samples)
 
 for i in range(samples):
     for axis in range(axises):
