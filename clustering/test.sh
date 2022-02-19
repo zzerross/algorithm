@@ -1,11 +1,13 @@
 #!/bin/bash
 
-script="python kmeans/python/sklean/sklean_kmeans.py"
+# m=sklean
+m=zzerross
+script="python kmeans/python/${m}/${m}_kmeans.py"
 n=0
 
 in="sample/samples/in${n}"
-out="ouput/out${n}.sklean"
-out_chart="ouput/out${n}.sklean.png"
+out="ouput/out${n}.${m}"
+out_chart="ouput/out${n}.${m}.png"
 
 set -e -x
 

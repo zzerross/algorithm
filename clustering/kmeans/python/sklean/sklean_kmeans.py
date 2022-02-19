@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
 
-def sklean_kmeans(centeroids_n, df):
+def kmeans(centeroids_n, df):
     kmeans = KMeans(n_clusters=centers_n).fit(df.values)
     return kmeans.cluster_centers_, kmeans.labels_
 
@@ -15,7 +15,7 @@ for i in range(0, data_n):
 
 df = pd.DataFrame(data, columns=['x'])
 
-centers, labels = sklean_kmeans(centers_n, df)
+centers, labels = kmeans(centers_n, df)
 for x in centers:
     print(x[0])
 
